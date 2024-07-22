@@ -1,6 +1,7 @@
 <?php
     require_once "config/config.php";
     ?>
+    i
 
 <h1>Welcome to size table</h1>
 
@@ -35,6 +36,7 @@
         <th>Size Name</th>
         <th>Availability</th>
         <th>Action</th>
+        <th>Update</th>
     </tr>
 
    <?php 
@@ -61,8 +63,9 @@
         <td><?php echo $i; ?></td>
         <td><?php echo $size_name; ?></td>
         <td><?php echo $status; ?></td>
-        <td><button id="remove" onClick="rem(<?php echo $size_id; ?>)">Remove</button></td>
-        </tr>
+        <td><button id="remove" onclick="rem(<?php echo $size_id; ?>)">Remove</button></td>
+        <td><button id="update" onclick="size_update(<?php echo $size_id; ?>,'<?php echo $size_name;?>')">Update</button></td>
+    </tr>
 
     <?php
         
@@ -73,21 +76,41 @@
 </table>
 
 <form method="POST" id="hiddenForm">
-    <input type="text" id="hiddenTxt" name="hiddenTxt" value="" >
+    <input type="hidden" id="hiddenTxt" name="hiddenTxt" value="" >
+    <input type="hidden" id="hiddenTxt2" name="hiddenTxt2" value="" >
+    <input type="hidden" id="size2" name="size2" value="" >
 </form>
 <?php
-    $removed_size = $_POST['hiddenTxt'];
-    if($removed_size != ""){
-    $qry4 = mysql_query("update size set status='0' where s_id='$removed_size'") or die(mysql_error());
+    $removed_size_id = $_POST['hiddenTxt'];
+    if($removed_size_id != ""){
+    $qry4 = mysql_query("update size set status='0' where s_id='$removed_size_id'") or die(mysql_error());
     }
 ?>
 
 <script>
     function rem(sizeId){
+        
         // document.getElementById("hiddenForm").hide();
         // document.getElementById("hiddenTxt").hide();
         document.getElementById("hiddenTxt").value = sizeId;
         document.getElementById("hiddenForm").submit();
     }
+
+    function size_update(sizeId,sName){
+        document.getElementById("hiddenTxt2").value = sizeId;
+        new_value = document.getElementById("size").value;
+        
+        document.getElementById("size2").value = new_value;
+
+        document.getElementById("hiddenForm").submit();
+        alert("Size Id = "+sizeId+" and old name = "+sName+" has been updated with the new value: "+new_value);
+
+    }
+    <?php 
+        $s_id = $_POST['hiddenTxt2'];
+        $s_name = $_POST['size2'];
+
+        $qry5 = mysql_query("update size set size='$s_name' where s_id = '$s_id'") or die(mysql_error());
+    ?>
 
 </script>
